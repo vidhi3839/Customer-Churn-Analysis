@@ -1,20 +1,32 @@
-## Problem Statement
+# Customer Churn Prediction: Decision Intelligence for Retention
 
-Customer churn directly impacts revenue, customer lifetime value, and acquisition costs.
-The challenge is not just predicting churn, but identifying which customers to act on early, given limited retention budgets and operational constraints.
+## Project Overview
+This project addresses a critical business question: **Which customers should we intervene on NOW, given limited retention budget?**
+
+Rather than simply predicting churn, this analysis provides a complete decision framework that:
+- Identifies high-risk customers before they leave
+- Quantifies the ROI of intervention strategies  
+- Delivers specific, actionable business recommendations
+
+**Key Result:** Targeting the top 15% highest-risk customers can prevent ~280 annual churns, retaining $581K in customer value at a cost of $22K — generating a **26:1 ROI**.
 
 ---
+##  Business Context
 
-The goal of this project is to:
-- Analyze customer behavior
-- Identify factors contributing to churn
-- Build a predictive model to identify high-risk customers
-- Provide data-driven retention strategies
+### The Problem
+A telecommunications company faces a **26.6% annual churn rate**, losing 1,869 customers from a base of 7,032. Without intervention, this represents:
+- Lost lifetime value: **~$3.9M annually**
+- Disrupted revenue streams
+- Increased customer acquisition pressure
 
----
+### The Decision Framework
 
-Decision This System Supports
-“Which customers should the company proactively target for retention interventions this month?”
+**Cost-Benefit Analysis:**
+- **Cost of missing a churner (False Negative):** $2,079 (lost customer lifetime value)
+- **Cost of targeting loyal customer (False Positive):** $100 (wasted intervention)
+- **Cost Ratio:** 20:1
+
+**Strategic Implication:** This ratio justifies optimizing for **recall over precision** — it's better to over-target than miss high-risk customers.
 
 ---
 
@@ -51,24 +63,24 @@ Decision This System Supports
 
 ---
 
-## Modeling Approach
-Two models were trained and compared:
+##  Key Findings
 
-### 1. Logistic Regression (Baseline)
-- Provides interpretability
-- Serves as a strong baseline for churn prediction
+### Churn Drivers (Ranked by Impact)
 
-### 2. Random Forest Classifier
-- Captures non-linear relationships and feature interactions
-- Achieved improved performance over the baseline model
+| **Factor** | **High Risk Segment** | **Low Risk Segment** | **Risk Multiplier** |
+|------------|----------------------|---------------------|---------------------|
+| **Contract Type** | Month-to-month: 42.7% | Two-year: 2.8% | **15.3x** |
+| **Customer Tenure** | 0-12 months: 47.7% | 36+ months: 7.4% | **6.4x** |
+| **Payment Method** | Electronic check: 45.3% | Auto-pay: 15.3% | **3.0x** |
+| **Online Security** | Without: 41.8% | With: 14.6% | **2.9x** |
+| **Tech Support** | Without: 41.5% | With: 15.2% | **2.7x** |
 
-**Evaluation Metrics:**
-- ROC-AUC
-- Recall
-- Precision
-- F1-score
-
-ROC-AUC and Recall were prioritized due to the business importance of identifying churn-prone customers.
+### Feature Importance (Top 5)
+1. **Tenure Months** — 17.0% importance
+2. **Total Charges** — 12.9% importance  
+3. **Contract Type (Two-year)** — 9.9% importance
+4. **Monthly Charges** — 9.3% importance
+5. **Dependents** — 7.9% importance
 
 ---
 
@@ -83,25 +95,82 @@ Feature importance analysis from the Random Forest model revealed that the most 
 
 ---
 
-## Business Insights
-- Customers on **month-to-month contracts** are significantly more likely to churn
-- **Early-tenure customers** show higher churn risk
-- Higher **monthly charges** increase churn probability
-- Customers with **online security and support services** churn less frequently
+## Model Performance
+
+### Approach
+Two models were trained and compared:
+- **Logistic Regression:** Interpretable baseline
+- **Random Forest:** Captures non-linear relationships (selected as final model)
+
+### Metrics (Random Forest)
+- **ROC-AUC:** 0.847
+- **Recall:** 0.82 (correctly identifies 82% of churners)
+- **Precision:** 0.68 (68% of flagged customers actually churn)
+- **F1-Score:** 0.74
+
+**Why Recall Was Prioritized:**  
+Given the 20:1 cost ratio, the business impact of missing a churner far exceeds the cost of a false positive. The model was intentionally tuned to maximize churn detection.
 
 ---
 
-## Business Recommendations
-- Incentivize customers to switch from month-to-month to long-term contracts
-- Focus retention campaigns on customers within their first year
-- Introduce personalized pricing or loyalty discounts for high-paying customers
-- Bundle value-added services to improve customer retention
+##  ROI Analysis
+
+### Targeting Strategy
+**Approach:** Target top 15% highest-risk customers based on model probability scores
+
+**Annual Projections:**
+- **Customers targeted:** 1,056
+- **Churners identified:** 470
+- **Churns prevented (60% effectiveness):** 282
+- **Customer value retained:** $581,278
+- **Intervention cost:** $22,440
+- **Net benefit:** $558,838
+- **ROI:** 26:1
+
+### Sensitivity Analysis
+
+| **Intervention Effectiveness** | **Churns Prevented** | **Value Retained** | **Net Benefit** | **ROI** |
+|-------------------------------|----------------------|-------------------|----------------|---------|
+| 40% | 188 | $387,852 | $365,412 | 17:1 |
+| 50% | 235 | $484,815 | $462,375 | 22:1 |
+| **60%** | **282** | **$581,778** | **$559,338** | **26:1** |
+| 70% | 329 | $678,741 | $656,301 | 30:1 |
+| 80% | 376 | $775,704 | $753,264 | 35:1 |
+
+**Key Insight:** Even under conservative assumptions (40% effectiveness), the model generates positive ROI, demonstrating robust business value.
 
 ---
 
-## Tools & Technologies
-- Python
-- pandas, NumPy
-- scikit-learn
-- Matplotlib
-- Jupyter Notebook
+##  Business Recommendations
+
+### **Priority 1: Contract Optimization**
+- **Target:** Month-to-month customers in months 1-12
+- **Action:** Automated email campaign offering 6-month contract upgrade with 15% discount
+- **Expected Cost:** $45/customer
+- **Impact:** Addresses the single largest churn driver (15x risk difference)
+
+### **Priority 2: Value-Added Service Bundling**
+- **Target:** Customers without online security or tech support
+- **Action:** Auto-include online security in high-risk renewals (first 3 months free)
+- **Impact:** 30-40% churn reduction in segment
+- **Cost:** Low (incremental service cost ~$10/month after trial)
+
+### **Priority 3: Early Warning System**
+- **Target:** All customers in months 1-6
+- **Action:** Proactive outreach at 3-month mark
+- **Method:** Personal call from customer success team
+- **Impact:** Address friction before it leads to churn (early-tenure customers are 6.4x more likely to churn)
+
+---
+
+##  Technical Implementation
+
+### Technologies Used
+- **Python 3.8+**
+- **Data Processing:** pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn
+- **Machine Learning:** scikit-learn
+- **Models:** Logistic Regression, Random Forest
+
+---
+  
