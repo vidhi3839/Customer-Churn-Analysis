@@ -1,6 +1,7 @@
 ## Problem Statement
 
-Customer churn is the number of existing customers lost, for any reason at all, over a given period of time. It provides companies with an understanding of customer satisfaction and customer loyalty, and can identify potential changes in a company’s bottom line. (IBM)
+Customer churn directly impacts revenue, customer lifetime value, and acquisition costs.
+The challenge is not just predicting churn, but identifying which customers to act on early, given limited retention budgets and operational constraints.
 
 ---
 
@@ -9,6 +10,11 @@ The goal of this project is to:
 - Identify factors contributing to churn
 - Build a predictive model to identify high-risk customers
 - Provide data-driven retention strategies
+
+---
+
+Decision This System Supports
+“Which customers should the company proactively target for retention interventions this month?”
 
 ---
 
