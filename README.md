@@ -8,13 +8,14 @@ Rather than simply predicting churn, this analysis provides a complete decision 
 - Quantifies the ROI of intervention strategies  
 - Delivers specific, actionable business recommendations
 
-**Key Result:** Targeting the top 15% highest-risk customers can prevent ~280 annual churns, retaining $581K in customer value at a cost of $22K — generating a **26:1 ROI**.
+**Key Result:** Targeting the top 15% highest-risk customers can prevent ~430 annual churns, retaining $903K in customer value at a cost of $106K — generating an **8.6:1 ROI**.
 
 ---
-##  Business Context
+
+## Business Context
 
 ### The Problem
-A telecommunications company faces a **26.6% annual churn rate**, losing 1,869 customers from a base of 7,032. Without intervention, this represents:
+A telecommunications company faces a **26.6% annual churn rate**, losing 1,869 customers from a base of 7,043. Without intervention, this represents:
 - Lost lifetime value: **~$3.9M annually**
 - Disrupted revenue streams
 - Increased customer acquisition pressure
@@ -22,9 +23,9 @@ A telecommunications company faces a **26.6% annual churn rate**, losing 1,869 c
 ### The Decision Framework
 
 **Cost-Benefit Analysis:**
-- **Cost of missing a churner (False Negative):** $2,079 (lost customer lifetime value)
+- **Cost of missing a churner (False Negative):** $2,101 (lost customer lifetime value)
 - **Cost of targeting loyal customer (False Positive):** $100 (wasted intervention)
-- **Cost Ratio:** 20:1
+- **Cost Ratio:** 21:1
 
 **Strategic Implication:** This ratio justifies optimizing for **recall over precision** — it's better to over-target than miss high-risk customers.
 
@@ -44,6 +45,7 @@ A telecommunications company faces a **26.6% annual churn rate**, losing 1,869 c
 - **Tenure-based:** Tenure Months
 
 ---
+
 ## Exploratory Data Analysis (EDA)
 - Analyzed churn distribution and class imbalance
 - Identified strong relationships between churn and:
@@ -63,35 +65,36 @@ A telecommunications company faces a **26.6% annual churn rate**, losing 1,869 c
 
 ---
 
-##  Key Findings
+## Key Findings
 
 ### Churn Drivers (Ranked by Impact)
 
 | **Factor** | **High Risk Segment** | **Low Risk Segment** | **Risk Multiplier** |
 |------------|----------------------|---------------------|---------------------|
 | **Contract Type** | Month-to-month: 42.7% | Two-year: 2.8% | **15.3x** |
-| **Customer Tenure** | 0-12 months: 47.7% | 36+ months: 7.4% | **6.4x** |
+| **Customer Tenure** | 0-12 months: 47.7% | 36+ months: 11.9% | **4.0x** |
 | **Payment Method** | Electronic check: 45.3% | Auto-pay: 15.3% | **3.0x** |
 | **Online Security** | Without: 41.8% | With: 14.6% | **2.9x** |
-| **Tech Support** | Without: 41.5% | With: 15.2% | **2.7x** |
+| **Tech Support** | Without: 41.6% | With: 15.2% | **2.7x** |
 
 ### Feature Importance (Top 5)
 1. **Tenure Months** — 17.0% importance
-2. **Total Charges** — 12.9% importance  
+2. **Total Charges** — 13.1% importance  
 3. **Contract Type (Two-year)** — 9.9% importance
 4. **Monthly Charges** — 9.3% importance
-5. **Dependents** — 7.9% importance
+5. **Dependents** — 8.0% importance
 
 ---
 
 ## Feature Importance
 Feature importance analysis from the Random Forest model revealed that the most influential churn drivers are:
-- Total Charges
 - Tenure Months
+- Total Charges
+- Contract Type (Two-year)
 - Monthly Charges
-- Contract Type
-- Payment Method
-- Value-added services such as Online Security
+- Dependents
+- Internet Service (Fiber optic)
+- Payment Method (Electronic check)
 
 ---
 
@@ -103,45 +106,46 @@ Two models were trained and compared:
 - **Random Forest:** Captures non-linear relationships (selected as final model)
 
 ### Metrics (Random Forest)
-- **ROC-AUC:** 0.847
-- **Recall:** 0.82 (correctly identifies 82% of churners)
-- **Precision:** 0.68 (68% of flagged customers actually churn)
-- **F1-Score:** 0.74
+- **ROC-AUC:** 0.844
+- **Recall:** 0.770 (correctly identifies 77% of churners)
+- **Precision:** 0.548 (55% of flagged customers actually churn)
+- **F1-Score:** 0.640
+- **Accuracy:** 0.770
 
 **Why Recall Was Prioritized:**  
-Given the 20:1 cost ratio, the business impact of missing a churner far exceeds the cost of a false positive. The model was intentionally tuned to maximize churn detection.
+Given the 21:1 cost ratio, the business impact of missing a churner far exceeds the cost of a false positive. The model was intentionally tuned to maximize churn detection.
 
 ---
 
-##  ROI Analysis
+## ROI Analysis
 
 ### Targeting Strategy
 **Approach:** Target top 15% highest-risk customers based on model probability scores
 
 **Annual Projections:**
 - **Customers targeted:** 1,056
-- **Churners identified:** 470
-- **Churns prevented (60% effectiveness):** 282
-- **Customer value retained:** $581,278
-- **Intervention cost:** $22,440
-- **Net benefit:** $558,838
-- **ROI:** 26:1
+- **Churners identified:** 717
+- **Churns prevented (60% effectiveness):** 430
+- **Customer value retained:** $903,376
+- **Intervention cost:** $105,600
+- **Net benefit:** $797,776
+- **ROI:** 8.6:1
 
 ### Sensitivity Analysis
 
 | **Intervention Effectiveness** | **Churns Prevented** | **Value Retained** | **Net Benefit** | **ROI** |
 |-------------------------------|----------------------|-------------------|----------------|---------|
-| 40% | 188 | $387,852 | $365,412 | 17:1 |
-| 50% | 235 | $484,815 | $462,375 | 22:1 |
-| **60%** | **282** | **$581,778** | **$559,338** | **26:1** |
-| 70% | 329 | $678,741 | $656,301 | 30:1 |
-| 80% | 376 | $775,704 | $753,264 | 35:1 |
+| 40% | 286 | $600,919 | $495,319 | 5.7:1 |
+| 50% | 358 | $751,147 | $645,547 | 7.1:1 |
+| **60%** | **430** | **$903,376** | **$797,776** | **8.6:1** |
+| 70% | 501 | $1,053,605 | $948,005 | 10.0:1 |
+| 80% | 573 | $1,205,834 | $1,100,234 | 11.4:1 |
 
 **Key Insight:** Even under conservative assumptions (40% effectiveness), the model generates positive ROI, demonstrating robust business value.
 
 ---
 
-##  Business Recommendations
+## Business Recommendations
 
 ### **Priority 1: Contract Optimization**
 - **Target:** Month-to-month customers in months 1-12
@@ -155,15 +159,15 @@ Given the 20:1 cost ratio, the business impact of missing a churner far exceeds 
 - **Impact:** 30-40% churn reduction in segment
 - **Cost:** Low (incremental service cost ~$10/month after trial)
 
-### **Priority 3: Early Warning System**
-- **Target:** All customers in months 1-6
-- **Action:** Proactive outreach at 3-month mark
-- **Method:** Personal call from customer success team
-- **Impact:** Address friction before it leads to churn (early-tenure customers are 6.4x more likely to churn)
+### **Priority 3: Payment Method Migration**
+- **Target:** Electronic check users
+- **Action:** Incentivize switch to credit card or bank auto-pay with $5/month discount for 6 months
+- **Impact:** 45.3% → 15.3% churn reduction
+- **Dual benefit:** Improves payment reliability
 
 ---
 
-##  Technical Implementation
+## Technical Implementation
 
 ### Technologies Used
 - **Python 3.8+**
@@ -173,4 +177,3 @@ Given the 20:1 cost ratio, the business impact of missing a churner far exceeds 
 - **Models:** Logistic Regression, Random Forest
 
 ---
-  
